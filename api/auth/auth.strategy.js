@@ -1,11 +1,11 @@
 'use strict';
 var LocalStrategy = require('passport-local').Strategy;
 var UserModel = require('../user/user.model');
+var jwt = require('jsonwebtoken');
 
 module.exports = passportConfig;
 
 function passportConfig(passport) {
-
 	// =========================================================================
 	// passport session setup ==================================================
 	// =========================================================================
@@ -31,21 +31,20 @@ function passportConfig(passport) {
 			passReqToCallback: true // allows us to pass back the entire request to the callback
 		},
 		function (req, email, password, done) {
-
 			// asynchronous
 			// User.findOne wont fire unless data is sent back
 			process.nextTick(function () {
-
 				// find a user whose email is the same as the forms email
 				// we are checking to see if the user trying to login already exists
-				UserModel.findOne({'local.email': email}, function (err, user) {
+				UserModel.findOne({'email': email}, function (err, user) {
+
 					// if there are any errors, return the error
 					if (err)
 						return done(err);
 
 					// check to see if theres already a user with that email
 					if (user) {
-						return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+						return done(null, false);
 					} else {
 
 						// if there is no user with that email
@@ -56,6 +55,7 @@ function passportConfig(passport) {
 						newUser.email = email;
 						newUser.password = newUser.generateHash(password);
 						newUser.name = req.body.name;
+						newUser.token = jwt.sign(newUser, process.env.JWT_SECRET);
 
 						// save the user
 						newUser.save(function (err) {
@@ -85,21 +85,21 @@ function passportConfig(passport) {
 				// we are checking to see if the user trying to login already exists
 				UserModel.findOne({'email': email}, function (err, user) {
 					// if there are any errors, return the error before anything else
-					if (err)
+					if (err) {
 						return done(err);
+					}
 
-					// if no user is found, return the message
-					if (!user)
+					// if no user is found or if the user is found but
+					// the password is wrong, return the message
+					if (!user || !user.comparePassword(password)) {
 						return done(null, false);
-
-					// if the user is found but the password is wrong
-					if (!user.comparePassword(password))
-						return done(null, false); // create the loginMessage and save it to session as flashdata
+					}
 
 					// all is well, return successful user
 					return done(null, user);
 				});
 			})
 		}));
+	return passport;
 
 }

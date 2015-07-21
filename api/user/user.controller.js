@@ -1,6 +1,7 @@
 'use strict';
 var User = require('./user.model');
 var q = require('q');
+var jwt = require('jsonwebtoken');
 
 module.exports = {
 	createUser: createUser,
@@ -19,6 +20,7 @@ function createUser(userDetails) {
 	user.email = userDetails.email;
 	user.password = userDetails.password;
 	user.name = userDetails.name;
+
 
 	user.save(function (err, usr) {
 
@@ -49,7 +51,7 @@ function getUserById(id) {
 			else {
 				deferred.resolve(usr.toJSON());
 			}
-		})
+		});
 	return deferred.promise;
 }
 

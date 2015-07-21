@@ -1,6 +1,8 @@
 // Load required packages
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+
+
 var SALT_WORK_FACTOR = 10;
 
 // Define our user schema
@@ -18,6 +20,7 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	token:{type: String},
 	roles:[{type:String}]
 });
 

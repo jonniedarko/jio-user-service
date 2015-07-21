@@ -1,7 +1,9 @@
 'use strict';
 
 var express = require('express');
+
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 
 var ctrl = require('./user.controller');
 
@@ -51,7 +53,8 @@ function setupRoutes(passport) {
 	});
 
 	// get /
-	router.post('/', function (req, res) {
+	router.post('/signUp', function (req, res) {
+		console.log('cookie', req.cookie);
 		passport.authenticate('local-signup', function (err, user, info){
 			if(err){
 				res.status(status.SERVER_ERROR).end();
@@ -59,7 +62,7 @@ function setupRoutes(passport) {
 				res.status(status.BAD_REQUEST).json({err: 'Error'});
 			}
 			else {
-				res.status(status.CREATED).json(user);
+				res.status(status.CREATED).json(user.toJSON());
 			}
 		})(req, res);
 
