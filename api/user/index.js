@@ -55,28 +55,28 @@ function setupRoutes(passport) {
 	// get /
 	router.post('/signUp', function (req, res) {
 		console.log('cookie', req.cookie);
-		passport.authenticate('local-signup', function (err, user, info){
+		passport.authenticate('local-signup', function (err, userData, info){
 			if(err){
 				res.status(status.SERVER_ERROR).end();
-			} else if (!user) {
+			} else if (!userData) {
 				res.status(status.BAD_REQUEST).json({err: 'Error'});
 			}
 			else {
-				res.status(status.CREATED).json(user.toJSON());
+				res.status(status.CREATED).json(userData);
 			}
 		})(req, res);
 
 	});
 
 	router.post('/Login', function(req, res, next){
-		passport.authenticate('local-login', function (err, user, info){
+		passport.authenticate('local-login', function (err, userData, info){
 			if(err){
 				res.status(status.SERVER_ERROR).end();
-			} else if (!user) {
+			} else if (!userData) {
 				res.status(status.BAD_REQUEST).json({err: 'Error'});
 			}
 			else {
-					res.status(status.OK).json(user.toJSON());
+					res.status(status.OK).json(userData);
 			}
 		})(req, res, next);
 

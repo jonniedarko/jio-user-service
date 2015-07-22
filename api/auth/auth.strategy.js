@@ -1,7 +1,10 @@
 'use strict';
 var LocalStrategy = require('passport-local').Strategy;
+var mongoose = require('mongoose');
+var generateId = mongoose.Types.ObjectId;
 var UserModel = require('../user/user.model');
-var jwt = require('jsonwebtoken');
+
+var authUtil = require('../../../AuthClient');
 
 module.exports = passportConfig;
 
@@ -55,13 +58,21 @@ function passportConfig(passport) {
 						newUser.email = email;
 						newUser.password = newUser.generateHash(password);
 						newUser.name = req.body.name;
-						newUser.token = jwt.sign(newUser, process.env.JWT_SECRET);
+						//newUser.token = jwt.sign(newUser, process.env.JWT_SECRET);
+						newUser._id = generateId();
 
 						// save the user
 						newUser.save(function (err) {
-							if (err)
+							if (err) {
 								throw err;
-							return done(null, newUser);
+							}
+							authUtil.createAndStoreToken(newUser, 60*60*2, function (error, token){
+								if(error){
+									return done(error);
+								}
+								return done(null, {user:newUser._id, token: token });
+							})
+
 						});
 					}
 
@@ -88,15 +99,21 @@ function passportConfig(passport) {
 					if (err) {
 						return done(err);
 					}
-
 					// if no user is found or if the user is found but
 					// the password is wrong, return the message
-					if (!user || !user.comparePassword(password)) {
+					else if (!user || !user.comparePassword(password)) {
 						return done(null, false);
 					}
 
 					// all is well, return successful user
-					return done(null, user);
+					else {
+						authUtil.createAndStoreToken(user, 60*60*2, function (error, token){
+							if(error){
+								return done(error);
+							}
+							return done(null, {user:user._id, token: token });
+						});
+					}
 				});
 			})
 		}));
