@@ -12,6 +12,7 @@ gulp.task('serve', [], function () {
 			NODE_ENV: 'development',
 			JWT_SECRET: 'some super super jwt secret',
 			PORT: '3300',
+			HOST: 'localhost',
 			MONGO: 'mongodb://localhost:27017/userService'
 		}
 	});
@@ -22,6 +23,7 @@ gulp.task('test', function (done) {
 		vars: {
 			NODE_ENV: 'testing',
 			JWT_SECRET: 'some super super jwt secret',
+			HOST: 'localhost',
 			PORT: 3301,
 			MONGO: 'mongodb://localhost:27017/userService-test'
 		}

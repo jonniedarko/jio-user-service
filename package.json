@@ -1,5 +1,5 @@
 {
-  "name": "UserService",
+  "name": "jio-user-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "jio-redis-auth" : "git://github.com/jonniedarko/jio-redis-auth.git#v0.0.1-beta",
     "chai": "^3.0.0",
     "connect-mongo": "^0.8.2",
     "gulp": "^3.9.0",

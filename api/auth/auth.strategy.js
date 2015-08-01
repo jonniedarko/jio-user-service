@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var generateId = mongoose.Types.ObjectId;
 var UserModel = require('../user/user.model');
 
-var authUtil = require('../../../AuthClient');
+var authUtil = require('jio-redis-auth');
 
 module.exports = passportConfig;
 
