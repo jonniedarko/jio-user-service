@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "jio-redis-auth" : "git://github.com/jonniedarko/jio-redis-auth.git#v0.0.1-beta",
+    "jio-redis-auth": "git://github.com/jonniedarko/jio-redis-auth.git#v0.0.1-beta",
     "chai": "^3.0.0",
     "connect-mongo": "^0.8.2",
     "gulp": "^3.9.0",
@@ -29,6 +29,7 @@
     "oauth2orize": "^1.0.1",
     "passport": "^0.2.2",
     "passport-http": "^0.2.2",
+    "passport-local": "^1.0.0",
     "q": "^1.4.1",
     "redis": "^0.12.1"
   }
