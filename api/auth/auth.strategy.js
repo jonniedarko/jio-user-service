@@ -1,10 +1,21 @@
 'use strict';
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
+var mongoUrl = process.env.MONGO || 'mongodb://localhost:27017/userService';
+mongoose.connect(mongoUrl);
+
+
 var generateId = mongoose.Types.ObjectId;
 var UserModel = require('../user/user.model');
 
-var authUtil = require('jio-redis-auth');
+var db = mongoose.connection;
+db.once('open', function () {
+	UserModel.find({}, function (e, body) {
+		console.log('It worked!');
+	});
+});
+
+var authUtil = require('../../../jio-node-auth')();
 
 module.exports = passportConfig;
 
@@ -37,6 +48,7 @@ function passportConfig(passport) {
 			// asynchronous
 			// User.findOne wont fire unless data is sent back
 			process.nextTick(function () {
+				console.log('userModel', UserModel);
 				// find a user whose email is the same as the forms email
 				// we are checking to see if the user trying to login already exists
 				UserModel.findOne({'email': email}, function (err, user) {
