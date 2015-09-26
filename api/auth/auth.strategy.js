@@ -1,19 +1,11 @@
 'use strict';
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var mongoUrl = process.env.MONGO || 'mongodb://localhost:27017/userService';
-mongoose.connect(mongoUrl);
+
 
 
 var generateId = mongoose.Types.ObjectId;
 var UserModel = require('../user/user.model');
-
-var db = mongoose.connection;
-db.once('open', function () {
-	UserModel.find({}, function (e, body) {
-		console.log('It worked!');
-	});
-});
 
 var authUtil = require('../../../jio-node-auth')();
 

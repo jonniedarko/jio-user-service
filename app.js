@@ -1,6 +1,9 @@
 var express = require('express');
-
 var bodyParser = require('body-parser');
+
+var mongoose = require('mongoose');
+var mongoUrl = process.env.MONGO || 'mongodb://localhost:27017/userService';
+mongoose.connect(mongoUrl);
 
 module.exports = app = express();
 
