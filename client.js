@@ -1,5 +1,5 @@
 'use strict';
-
+var q = require('q');
 var userCtrl = require('./api/user/user.controller');
 
 function getUser(id) {
