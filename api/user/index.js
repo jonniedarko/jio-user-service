@@ -4,6 +4,7 @@ var express = require('express');
 
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+var USER_ID_HEADER_KEY = 'x-key';
 
 var ctrl = require('./user.controller');
 
@@ -21,8 +22,11 @@ module.exports = setupRoutes;
 function setupRoutes(passport) {
 	// get /:id
 	router.get('/:id', function (req, res) {
+		var userID =
+			req.params.id === 'me'?
+				req.headers[USER_ID_HEADER_KEY] : req.params.id;
 
-		ctrl.getUserById(req.params.id)
+		ctrl.getUserById(userID)
 			.then(function (user) {
 				if (user) {
 					res.status(status.OK).json(user);
