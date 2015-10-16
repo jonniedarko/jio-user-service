@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var auth = require('jio-node-auth')();
 
 var router = express.Router();
 var jwt = require('jsonwebtoken');
@@ -21,7 +22,7 @@ module.exports = setupRoutes;
 
 function setupRoutes(passport) {
 	// get /:id
-	router.get('/:id', function (req, res) {
+	router.get('/:id', auth.verify, function (req, res) {
 		var userID =
 			req.params.id === 'me'?
 				req.headers[USER_ID_HEADER_KEY] : req.params.id;
